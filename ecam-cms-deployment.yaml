@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecam-cms-deploy
+spec:
+  selector:
+    matchLabels:
+      app: ecam-cms-deploy
+  template:
+    metadata:
+      name: ecam-cms
+      labels:
+        app: ecam-cms-deploy
+    spec:
+      containers:
+      - image: tanminkwan/ecam-cms
+        imagePullPolicy: Always
+        name: ecam-cms-con
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        volumeMounts:
+        - mountPath: "/home/hls/contents"
+          name: ecam-cms-vol
+      volumes:
+      - name: ecam-cms-vol
+        persistentVolumeClaim:
+          claimName: ecam-pvc
+  replicas: 3

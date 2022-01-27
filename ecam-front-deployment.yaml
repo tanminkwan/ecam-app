@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecam-front-deploy
+spec:
+  selector:
+    matchLabels:
+      app: ecam-front-deploy
+  template:
+    metadata:
+      name: ecam-front
+      labels:
+        app: ecam-front-deploy
+    spec:
+      containers:
+      - image: techno153/ecam-front
+        imagePullPolicy: Always
+        name: ecam-front-con
+        ports:
+        - containerPort: 80
+          protocol: TCP
+  replicas: 3

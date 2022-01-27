@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecam-app-deploy
+spec:
+  selector:
+    matchLabels:
+      app: ecam-app-deploy
+  template:
+    metadata:
+      name: ecam-app
+      labels:
+        app: ecam-app-deploy
+    spec:
+      containers:
+      - image: tanminkwan/ecam-flask:redis
+        imagePullPolicy: Always
+        name: ecam-app-con
+        env:
+        - name: DATABASE_URI
+          value: "postgresql://tiffanie:1q2w3e4r!!@192.168.0.6:5432/toto"
+        - name: REDIS_URI
+          value: "redis://:1q2w3e4r!!@192.168.0.2:6378/0"
+        ports:
+        - containerPort: 5000
+          protocol: TCP
+        volumeMounts:
+        - mountPath: "/static/uploads"
+          name: ecam-app-vol
+      volumes:
+      - name: ecam-app-vol
+        persistentVolumeClaim:
+          claimName: ecam-pvc
+  replicas: 3
